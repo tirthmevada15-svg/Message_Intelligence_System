@@ -19,25 +19,16 @@ from sklearn.metrics import (
     classification_report
 )
 
-# ==================================
 # Load Dataset
-# ==================================
-
 df = pd.read_excel("Message_Intelligence_Dataset_5200.xlsx")
 
 print("Dataset Shape :", df.shape)
 
-# ==================================
 # Check Missing Values
-# ==================================
-
 print("\nMissing Values:")
 print(df.isnull().sum())
 
-# ==================================
 # Select Features
-# ==================================
-
 X = df.drop(
     columns=[
         "spam_label",
@@ -50,10 +41,7 @@ X = df.drop(
 
 y = df["spam_label"]
 
-# ==================================
 # Handle Missing Values
-# ==================================
-
 imputer = SimpleImputer(strategy="mean")
 
 X = pd.DataFrame(
@@ -61,10 +49,7 @@ X = pd.DataFrame(
     columns=X.columns
 )
 
-# ==================================
 # Train Test Split
-# ==================================
-
 X_train, X_test, y_train, y_test = train_test_split(
     X,
     y,
@@ -73,19 +58,13 @@ X_train, X_test, y_train, y_test = train_test_split(
     stratify=y
 )
 
-# ==================================
 # Scaling
-# ==================================
-
 scaler = StandardScaler()
 
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
-# ==================================
 # KNN
-# ==================================
-
 print("\n========== KNN ==========")
 
 for k in [3, 5, 7]:
@@ -105,10 +84,7 @@ knn.fit(X_train_scaled, y_train)
 
 y_pred_knn = knn.predict(X_test_scaled)
 
-# ==================================
 # SVM
-# ==================================
-
 print("\n========== SVM ==========")
 
 svm = SVC(kernel="rbf")
@@ -117,10 +93,7 @@ svm.fit(X_train_scaled, y_train)
 
 y_pred_svm = svm.predict(X_test_scaled)
 
-# ==================================
 # Naive Bayes
-# ==================================
-
 print("\n========== Naive Bayes ==========")
 
 nb = GaussianNB()
@@ -129,10 +102,7 @@ nb.fit(X_train_scaled, y_train)
 
 y_pred_nb = nb.predict(X_test_scaled)
 
-# ==================================
 # Evaluation Function
-# ==================================
-
 def evaluate(name, y_true, y_pred):
 
     print("\n" + "=" * 40)
@@ -150,20 +120,14 @@ def evaluate(name, y_true, y_pred):
     print("\nClassification Report")
     print(classification_report(y_true, y_pred))
 
-# ==================================
-# Results
-# ==================================
-
+# Result
 evaluate("KNN", y_test, y_pred_knn)
 
 evaluate("SVM", y_test, y_pred_svm)
 
 evaluate("Naive Bayes", y_test, y_pred_nb)
 
-# ==================================
 # Model Comparison
-# ==================================
-
 results = pd.DataFrame({
     "Model": ["KNN", "SVM", "Naive Bayes"],
     "Accuracy": [
